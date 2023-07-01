@@ -4,11 +4,18 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "cmake")
 
 set(ProjectName "video-flow-control")
-set(ProjectNamespace "atg_tmpl")
+set(ProjectNamespace "VFC")
 
 project("${ProjectName}")
 
+find_package(OpenGL REQUIRED)
+find_package(glfw3 REQUIRED)
+
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "-fdiagnostics-color=always -Wall -g")
+
+include_directories(${PROJECT_SOURCE_DIR}/dependencies)
+include_directories(${PROJECT_SOURCE_DIR}/dependencies/imgui)
 
 # =========================================================
 # gtest
@@ -33,7 +40,7 @@ set_property(TARGET gtest_main PROPERTY FOLDER "gtest")
 add_library("${ProjectName}" STATIC
     # Source files
     src/information.cpp
-
+    
     # Header files
     include/information.h
 )
@@ -43,8 +50,34 @@ target_compile_definitions("${ProjectName}" PRIVATE PROJECT_NAMESPACE=${ProjectN
 add_executable("${ProjectName}-main"
     # Source files
     src/main.cpp
+    src/glad/glad.c
+    src/imgui/imgui.cpp
+    src/imgui/imgui_demo.cpp
+    src/imgui/imgui_draw.cpp
+    src/imgui/imgui_tables.cpp
+    src/imgui/imgui_widgets.cpp
+    src/imgui/imgui_impl_glfw.cpp
+    src/imgui/imgui_impl_opengl3.cpp
 
     # Header files
+)
+
+find_library(OPENGL_LIBRARY OpenGL)
+find_library(COCOA_LIBRARY Cocoa)
+find_library(IOKIT_LIBRARY IOKit)
+find_library(COREVIDEO_LIBRARY CoreVideo)
+find_library(COREFOUNDATION_LIBRARY CoreFoundation)
+
+target_link_libraries("${ProjectName}-main" 
+    ${OPENGL_LIBRARY} 
+    ${COCOA_LIBRARY} 
+    ${IOKIT_LIBRARY} 
+    ${COREVIDEO_LIBRARY} 
+    ${COREFOUNDATION_LIBRARY}
+)
+
+target_link_libraries("${ProjectName}-main" 
+    glfw
 )
 
 # gtest
