@@ -59,6 +59,7 @@ target_compile_definitions("${ProjectName}" PRIVATE PROJECT_NAMESPACE=${ProjectN
 add_executable("${ProjectName}-main"
     # Source files
     src/driver.cc
+    src/logger.cc
 
     # Header files
 )
