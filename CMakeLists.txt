@@ -37,9 +37,18 @@ set_property(TARGET gtest_main PROPERTY FOLDER "gtest")
 
 # =========================================================
 
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
 add_library("${ProjectName}" STATIC
     # Source files
-    src/information.cpp
+    src/information.cc
+    dependencies/imgui/imgui.cpp
+    dependencies/imgui/imgui_widgets.cpp
+    dependencies/imgui/imgui_tables.cpp
+    dependencies/imgui/imgui_impl_opengl3.cpp
+    dependencies/imgui/imgui_impl_glfw.cpp
+    dependencies/imgui/imgui_draw.cpp
+    dependencies/imgui/imgui_demo.cpp
     
     # Header files
     include/information.h
@@ -49,15 +58,7 @@ target_compile_definitions("${ProjectName}" PRIVATE PROJECT_NAMESPACE=${ProjectN
 
 add_executable("${ProjectName}-main"
     # Source files
-    src/main.cpp
-    src/glad/glad.c
-    src/imgui/imgui.cpp
-    src/imgui/imgui_demo.cpp
-    src/imgui/imgui_draw.cpp
-    src/imgui/imgui_tables.cpp
-    src/imgui/imgui_widgets.cpp
-    src/imgui/imgui_impl_glfw.cpp
-    src/imgui/imgui_impl_opengl3.cpp
+    src/driver.cc
 
     # Header files
 )
@@ -77,6 +78,7 @@ target_link_libraries("${ProjectName}-main"
 )
 
 target_link_libraries("${ProjectName}-main" 
+    "${ProjectName}"
     glfw
 )
 
