@@ -11,8 +11,10 @@
 std::shared_ptr<spdlog::logger> Logger::logger_;
 
 void Logger::Initialize() {
-  spdlog::set_pattern("%^[%T] %n: %v%$");
-  logger_ = spdlog::stdout_color_mt("APP");
+  // See for pattern formatting:
+  // https://internal.dunescience.org/doxygen/classspdlog_1_1pattern__formatter.html 
+  spdlog::set_pattern("[%x %T] [%n] [%^%l%$] %v");
+  logger_ = spdlog::stdout_color_mt("VFC");
   logger_->set_level(spdlog::level::trace);
 
   LOG_INFO("Initialized logger!");

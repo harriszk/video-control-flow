@@ -10,24 +10,14 @@ project("${ProjectName}")
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
+find_package(OpenCV REQUIRED)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "-fdiagnostics-color=always -Wall -g")
 
-find_path(AVCODEC_INCLUDE_DIR dependencies/submodules/ffmpeg/libavcodec/avcodec.h)
-find_library(AVCODEC_LIBRARY avcodec)
-
-find_path(AVFORMAT_INCLUDE_DIR dependencies/submodules/ffmpeg/libavformat/avformat.h)
-find_library(AVFORMAT_LIBRARY avformat)
-
-find_path(AVUTIL_INCLUDE_DIR dependencies/submodules/ffmpeg/libavutil/avutil.h)
-find_library(AVUTIL_LIBRARY avutil)
-
-find_path(AVDEVICE_INCLUDE_DIR dependencies/submodules/ffmpeg/libavdevice/avdevice.h)
-find_library(AVDEVICE_LIBRARY avdevice)
-
 include_directories(${PROJECT_SOURCE_DIR}/dependencies)
 include_directories(${PROJECT_SOURCE_DIR}/dependencies/imgui)
+include_directories(${OpenCV_INCLUDE_DIRS})
 
 # =========================================================
 # gtest
@@ -78,32 +68,24 @@ add_executable("${ProjectName}-main"
     # Header files
 )
 
-target_include_directories("${ProjectName}-main" PRIVATE ${AVCODEC_INCLUDE_DIR} ${AVFORMAT_INCLUDE_DIR} ${AVUTIL_INCLUDE_DIR} ${AVDEVICE_INCLUDE_DIR})
-
 find_library(OPENGL_LIBRARY OpenGL)
 find_library(COCOA_LIBRARY Cocoa)
 find_library(IOKIT_LIBRARY IOKit)
 find_library(COREVIDEO_LIBRARY CoreVideo)
 find_library(COREFOUNDATION_LIBRARY CoreFoundation)
 
-target_link_libraries("${ProjectName}-main" 
+target_link_libraries("${ProjectName}-main"
+    ${OpenCV_LIBS}
     ${OPENGL_LIBRARY} 
     ${COCOA_LIBRARY} 
     ${IOKIT_LIBRARY} 
     ${COREVIDEO_LIBRARY} 
     ${COREFOUNDATION_LIBRARY}
-    ${AVCODEC_LIBRARY}
-    ${AVFORMAT_LIBRARY}
-    ${AVUTIL_LIBRARY}
-    ${AVDEVICE_LIBRARY}
 )
 
 target_link_libraries("${ProjectName}-main" 
     "${ProjectName}"
     glfw
-    avformat
-    avcodec
-    avutil
 )
 
 
